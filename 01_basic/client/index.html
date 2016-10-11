@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app="app">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="/static/css/app.css">
+		<script type="text/javascript" src="angular/angular.min.js"></script>
+		<script type="text/javascript" src="angular-route/angular-route.min.js"></script>
+		<script type="text/javascript">
+			var app = angular.module('app', ['ngRoute']);
+			app.config(['$routeProvider', function($routeProvider) {
+				$routeProvider
+					.when('/', {
+						templateUrl: 'static/partials/sass.html'
+					})
+					.otherwise({
+						redirectTo: '/'
+					});
+			}]);
+		</script>
+		<title>SASS Practice</title>
+	</head>
+	<body>
+		<div class="container">
+			<h1>hello world</h1>
+		</div>
+		<div ng-view="">
+			<!-- partials go here -->
+		</div>
+	</body>
+</html>

@@ -1,0 +1,11 @@
+$h3_color: purple;
+$border_color: red;
+
+.sass_check {
+	h3 {
+		color: $h3_color;
+	}
+	h2 {
+		border: 1px solid $border_color;
+	}
+}
