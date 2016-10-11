@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html ng-app="app">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="static/css/style.css">
+
+		<title>socket.io / MEAN / Sass</title>
+	</head>
+	<body>
+		<h1>hello world!</h1>
+		<div ng-view="">
+			<!-- partials to be loaded in this div! -->
+		</div>
+
+		<script type="text/javascript" src="angular/angular.min.js"></script>
+		<script type="text/javascript" src="angular-route/angular-route.min.js"></script>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+			var app = angular.module("app", ['ngRoute']);
+			var socket = io.connect();
+
+			app.config(['$routeProvider', function($routeProvider) {
+				$routeProvider
+					.when('/login', {
+						templateUrl: 'static/partials/login.html',
+						controller: 'LoginController'
+					})
+					.otherwise({
+						redirectTo: '/login'
+					});
+			}]);
+
+			app.factory('socketFactory', ['$http', function($http) {
+				var socket = io.connect();
+
+				function SocketFactory() {
+					this.emit = function(eventName, data) {
+						socket.emit(eventName, data);
+					}
+
+					this.on = function(eventName, callback) {
+						socket.on(eventName, function(data) {
+							callback(data);
+						});
+					}
+				}
+
+				return new SocketFactory();
+			}]);
+
+			app.controller('LoginController', ['$scope', '$location', 'socketFactory', function($scope, $location, socketFactory) {
+				$scope.count = 0;
+
+				// socketFactory.on('')
+
+
+				socketFactory.emit('user_logged', {reason: 'logged in'});
+				// socket.on('users_count', function(data) {
+				// 	// console.log(data.count);
+				// 	$scope.count = data.count;
+				// 	console.log($scope.count);
+				// });
+
+				socketFactory.on('users_count', function(data) {
+					// if ($scope.count) {
+					// 	// $scope.count.shift();
+					// 	$scope.count.push(data.count);
+					// }
+					// else {
+					// 	$scope.count.push(data.count);
+					// }
+					$scope.count = data.count;
+					$scope.$apply();
+					console.log($scope.count);
+				});
+
+
+				console.log($scope.count);
+
+			}]);
+		</script>
+	</body>
+</html>
